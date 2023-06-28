@@ -350,7 +350,7 @@ try:
         logging.debug(f"Checking Version")
         self.task = "Github Checker"
         self._print_stats()
-        response = requests.get("https://raw.githubusercontent.com/efenatuyo/ugc-sniper/main/version")
+        response = requests.get("https://raw.githubusercontent.com/actuallyasmartname/ugc-sniper/main/version")
         if response.status_code != 200:
             pass
         print(response.text.rstrip())
