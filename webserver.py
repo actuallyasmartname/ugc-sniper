@@ -1,8 +1,7 @@
-from flask import Flask, request, abort, jsonify
-import time, json, asyncio, aiohttp, re, traceback, os
-from flask_socketio import SocketIO, emit, join_room, disconnect, ConnectionRefusedError
-from datetime import datetime, timedelta
-RATE_LIMIT_WINDOW = timedelta(seconds=60)
+from flask import Flask, request
+import time, json, asyncio, aiohttp, re, traceback, datetime, os
+from flask_socketio import SocketIO, disconnect
+RATE_LIMIT_WINDOW = datetime.timedelta(seconds=60)
 RATE_LIMIT_COUNT = 10
 app = Flask(__name__)
 webhook = "WEBHOOKHERE"
@@ -49,10 +48,6 @@ url_list = [
 ]
 
 
-
-  
-                     
-
 def ban_user(user_id):
     ban_list.append(user_id)
 
@@ -98,6 +93,7 @@ def handle_disconnect():
     socketio.emit('new_auto_search_items', {'message': 'New item data received', 'data': items})
   except: pass
 
+
 async def send_webhook():
   connector = aiohttp.TCPConnector(limit=None)  # Increase concurrent connections
   async with aiohttp.ClientSession(connector=connector) as session:
@@ -111,8 +107,7 @@ async def send_webhook():
             print(f"Error sending webhook: {response.text}")
         await asyncio.sleep(10)
             
-    
-            
+              
 async def auto_searcho():
     global items, prev_items
     rang = 2
@@ -141,7 +136,18 @@ async def auto_searcho():
                                 items[f"{item['id']}"] = {"current_buys": 0, "max_buys": float('inf'), "max_price": 0}
                                 with open("items.json", "w") as f: json.dump(items, f, indent=4)
                                 print({f"{item['id']}": item})
-                                async with client.post(webhook, json={"content": f"https://www.roblox.com/catalog/{item['id']}/XOLO-WATCHER"}) as r: pass
+                                embed_data = {
+                                  "title": "Item found with UGC autosearch!",
+                                  "url": f"https://www.roblox.com/catalog/{item['id']}",
+                                  "color": 65280,
+                                  "author": {
+                                    "name": "UGC Autosearch"
+                                  },
+                                  "footer": {
+                                    "text": "Xolo's Sniper"
+                                  }
+                                }
+                                async with client.post(webhook, json={"embeds": [embed_data]}) as r: pass
                     items = {str(key): value for key, value in items.items()}
                     print(len(items))
                     await asyncio.sleep(5)
