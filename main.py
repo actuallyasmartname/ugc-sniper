@@ -1,34 +1,15 @@
 # made by xolo#4942
 try:
  try:
-  import datetime
-  import logging
-  import traceback
-  import os
-  import uuid
-  import asyncio
-  import random
-  import requests
+  import datetime, logging, traceback, os, uuid, asyncio, random, requests, aiohttp, json, discord, time, socketio, themes
   from colorama import Fore, Back, Style
-  import aiohttp
-  import json
-  import discord
   from discord.ext import commands
-  import time
-  import socketio
   from functools import partial
   from typing import Dict
   from itertools import islice, cycle
-  import themes
  except ModuleNotFoundError as e:
     print("Modules not installed properly installing now", e)
-    os.system("pip install requests")
-    os.system("pip install colorama")
-    os.system("pip install colorama")
-    os.system("pip install aiohttp")
-    os.system("pip install discord")
-    os.system("pip install logging")
-    os.system("pip install python-socketio")
+    os.system("pip install requests colorama aiohttp discord logging python-socketio")
     
  logging.basicConfig(filename='logs.txt', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
  logger = logging.getLogger(__name__)
